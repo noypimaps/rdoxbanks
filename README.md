@@ -5,4 +5,3 @@ The following repository contains the Bureau of Internal Revenue's Regional Dist
 ## Requirements and/or Libraries Used
 - Leaflet
 - Leaflet Marker Cluster
-- Vue JS

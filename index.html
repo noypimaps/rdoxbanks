@@ -1,0 +1,41 @@
+<html>
+  <head>
+    <title>RDO x Banks</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.1.0/dist/leaflet.css"/> 
+    <script src="https://unpkg.com/leaflet@1.1.0/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.3.0/dist/leaflet.markercluster.js"></script>
+    <link rel="stylesheet" href="lib/MarkerCluster.css"/>
+    <link rel="stylesheet" href="lib/MarkerCluster.Default.css"/>
+    <script src="lib/leaflet.geocsv.js"></script>
+    <style>
+        #mapid { height: 100%; }
+    </style>
+  </head>
+  <body>
+    <div id="mapid"></div>
+  </body>
+  <script>
+    var markers = L.markerClusterGroup({
+      maxClusterRadius: 20
+    });
+    var map = L.map('mapid').setView([12.656648, 121.0688209], 5);
+    L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+        subdomains: 'abcd',
+        maxZoom: 19
+    }).addTo(map);
+    $.get('data/rdoxbanks_summary.csv', function(rdoxbanks_summary){
+      var rdoLayer = L.geoCsv(rdoxbanks_summary,{
+        firstLineTitles: true,
+        fieldSeparator: ',',
+        titles: ["revenue_district_office_number", "address", "longitude", "latitude", "number_of_banks", "radius_banks_percent"],
+        latitudeTitle: "latitude",
+        longitudeTitle: "longitude"
+      });
+      markers.addLayer(rdoLayer);
+      map.addLayer(markers);
+    });
+
+  </script>
+</html>
