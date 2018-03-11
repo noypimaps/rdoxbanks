@@ -6,3 +6,4 @@ The following repository contains the Bureau of Internal Revenue's Regional Dist
 - [Leaflet](http://leafletjs.com)
 - [Leaflet Marker Cluster](https://github.com/Leaflet/Leaflet.markercluster)
 - [Leaflet GeoCSV](https://github.com/joker-x/Leaflet.geoCSV)
+- [Jquery](https://jquery.com)
