@@ -12,6 +12,8 @@
   <script src="lib/leaflet.geocsv.js"></script>
   <link rel="stylesheet" href="lib/L.Control.HtmlLegend.css" />
   <script src="lib/L.Control.HtmlLegend.js"></script>
+  <link rel="stylesheet" href="lib/leaflet-measure.css" />
+  <script src="lib/leaflet-measure.js"></script>
 
   <style>
     #mapid {
@@ -30,15 +32,31 @@
   </div>
 </body>
 <script>
-  var markers = L.markerClusterGroup({
-    maxClusterRadius: 20
-  });
+  // initialize the map and tile layer
   var map = L.map('mapid').setView([12.656648, 121.0688209], 5);
   L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
     subdomains: 'abcd',
     maxZoom: 19
   }).addTo(map);
+
+  // setup leaflet-measure control
+  var measureControl = new L.Control.Measure({
+    position: 'topleft',
+    primaryLengthUnit: 'meters',
+    secondaryLengthUnit: 'kilometers',
+    primaryAreaUnit: 'sqmeters',
+    secondaryAreaUnit: 'hectares'
+  });
+
+  measureControl.addTo(map);
+  
+  // setup marker cluster
+  var markers = L.markerClusterGroup({
+    maxClusterRadius: 20
+  });
+
+  // retrieve rdo data from csv 
   $.get('data/rdoxbanks_summary.csv', function (rdoxbanks_summary) {
     var rdoLayer = L.geoCsv(rdoxbanks_summary, {
       onEachFeature: function (feature, layer) {
@@ -64,6 +82,8 @@
     });
     markers.addLayer(rdoLayer);
     map.addLayer(markers);
+
+    // add the html legend control on the map
     var htmlLegend = L.control.htmllegend({
       position: 'topright',
       legends: [{
@@ -80,7 +100,6 @@
       defaultOpacity: 0.7,
     });
     map.addControl(htmlLegend);
-    
     $(".opacity-slider").remove();
     $(".visibility-toggle").remove();
   });
